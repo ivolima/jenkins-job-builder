@@ -37,6 +37,25 @@ import jenkins_jobs.modules.base
 from jenkins_jobs.errors import JenkinsJobsException
 
 
+def hg(parser, xml_parent, data):
+    """yaml: hg
+    Specifies the hg SCM repository for this job.
+    Requires the Jenkins `Mercurial Plugin.
+    <https://wiki.jenkins-ci.org/display/JENKINS/Mercurial+Plugin>`_
+
+    :arg str url: URL of the hg repository
+    """
+
+    scm = XML.SubElement(xml_parent,
+                         'scm', {'class': 'hudson.plugins.mercurial.MercurialSCM', 'plugin': 'mercurial@1.50'})
+    XML.SubElement(scm, 'source').text = data['url']
+    XML.SubElement(scm, 'modules').text = ''
+    XML.SubElement(scm, 'revisionType').text = 'BRANCH'
+    XML.SubElement(scm, 'revision').text = data['revision']
+    XML.SubElement(scm, 'clean').text = 'false'
+    XML.SubElement(scm, 'credentialsId').text = ''
+    XML.SubElement(scm, 'disableChangeLog').text = 'false'
+
 def git(parser, xml_parent, data):
     """yaml: git
     Specifies the git SCM repository for this job.
